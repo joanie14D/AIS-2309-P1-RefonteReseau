@@ -1,0 +1,52 @@
+enable
+configure terminal
+
+version 12.2(37)SE1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+service password-encryption
+
+hostname RTRDC01
+
+enable secret VotreMotDePasseEnable
+
+spanning-tree mode pvst
+
+interface range FastEthernet0/1 - 24
+!
+
+interface GigabitEthernet0/1
+ switchport trunk allowed vlan 30,120,130
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+
+interface GigabitEthernet0/2
+ switchport trunk allowed vlan 10,20,120,130
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+
+interface Vlan1
+ ip address 10.190.0.1 255.255.255.0
+
+ip classless
+
+ip flow-export version 9
+
+line con 0
+ login
+
+line aux 0
+!
+
+line vty 0 4
+ access-class 1 in
+ password VotreMotDePasseVTY
+ login
+
+line vty 5 15
+ password VotreMotDePasseVTY
+ login
+
+end
+
+write memory
